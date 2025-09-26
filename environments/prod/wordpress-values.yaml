@@ -1,0 +1,64 @@
+# Production Environment Configuration
+replicaCount: 3
+
+wordpressUsername: admin
+wordpressPassword: prodpassword123
+wordpressEmail: admin@prod.example.com
+wordpressBlogName: "WordPress Production Blog"
+
+service:
+  type: NodePort
+  nodePorts:
+    http: 30082
+
+persistence:
+  enabled: true
+  size: 20Gi
+  storageClass: standard
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 2Gi
+  requests:
+    cpu: 500m
+    memory: 1Gi
+
+mariadb:
+  enabled: true
+  auth:
+    rootPassword: rootpassword789
+    database: wordpress_prod
+    username: wordpress
+    password: wordpress789
+  primary:
+    persistence:
+      enabled: true
+      size: 20Gi
+      storageClass: standard
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 60
+
+ingress:
+  enabled: false
+
+healthcheck:
+  enabled: true
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: false
+
+podSecurityContext:
+  enabled: true
+  fsGroup: 1001
+  
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1001
+  runAsNonRoot: true

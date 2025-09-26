@@ -1,0 +1,50 @@
+# Development Environment Configuration
+replicaCount: 1
+
+wordpressUsername: admin
+wordpressPassword: devpassword123
+wordpressEmail: admin@dev.example.com
+wordpressBlogName: "WordPress Dev Blog"
+
+service:
+  type: NodePort
+  nodePorts:
+    http: 30080
+
+persistence:
+  enabled: true
+  size: 5Gi
+  storageClass: standard
+
+resources:
+  limits:
+    cpu: 300m
+    memory: 512Mi
+  requests:
+    cpu: 150m
+    memory: 256Mi
+
+mariadb:
+  enabled: true
+  auth:
+    rootPassword: rootpassword123
+    database: wordpress_dev
+    username: wordpress
+    password: wordpress123
+  primary:
+    persistence:
+      enabled: true
+      size: 5Gi
+      storageClass: standard
+
+autoscaling:
+  enabled: false
+
+ingress:
+  enabled: false
+
+healthcheck:
+  enabled: true
+  
+metrics:
+  enabled: false

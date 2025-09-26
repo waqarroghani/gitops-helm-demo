@@ -1,0 +1,55 @@
+# Staging Environment Configuration
+replicaCount: 2
+
+wordpressUsername: admin
+wordpressPassword: stagingpassword123
+wordpressEmail: admin@staging.example.com
+wordpressBlogName: "WordPress Staging Blog"
+
+service:
+  type: NodePort
+  nodePorts:
+    http: 30081
+
+persistence:
+  enabled: true
+  size: 10Gi
+  storageClass: standard
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 1Gi
+  requests:
+    cpu: 250m
+    memory: 512Mi
+
+mariadb:
+  enabled: true
+  auth:
+    rootPassword: rootpassword456
+    database: wordpress_staging
+    username: wordpress
+    password: wordpress456
+  primary:
+    persistence:
+      enabled: true
+      size: 10Gi
+      storageClass: standard
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 70
+
+ingress:
+  enabled: false
+
+healthcheck:
+  enabled: true
+
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: false
